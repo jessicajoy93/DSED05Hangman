@@ -68,7 +68,15 @@
     <Compile Include="Words.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\Scores.db" />
+    <AndroidAsset Include="Assets\Scores.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidAsset>
+    <AndroidAsset Include="Assets\Scoring.sqlite">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidAsset>
+    <AndroidAsset Include="Assets\Score.sqlite3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidAsset>
     <None Include="GettingStarted.Xamarin" />
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />

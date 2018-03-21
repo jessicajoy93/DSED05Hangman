@@ -19,8 +19,8 @@ namespace DSED05Hangman
         private ListView lvHighScores;
         private List<tblscores> myList;
         private DatabaseManager myDbManager;
-        private static string dbName = "tblscores.db";
-        string dbPath = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.ToString(), dbName);
+        //private string dbName = "Scores.db";
+        //string dbPath = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.ToString(), dbName);
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -56,6 +56,8 @@ namespace DSED05Hangman
         {
             // Check if your DB has already been extracted. If the file does not exist move it.
             //WARNING!!!!!!!!!!! If your DB changes from the first time you install it, ie: you change the tables, and you get errors then comment out the if wrapper so that it is FORCED TO UPDATE. Otherwise you spend hours staring at code that should run OK but the db, that you can’t see inside of on your phone, is diffferent from the db you are coding to.
+            string dbName = "Score.sqlite3";
+            string dbPath = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.ToString(), dbName);
 
             if (!File.Exists(dbPath))
             {
@@ -72,6 +74,7 @@ namespace DSED05Hangman
                     }
                 }
             }
+            //}
         }
 
         private void OnBackToGame_Click(object sender, EventArgs e)

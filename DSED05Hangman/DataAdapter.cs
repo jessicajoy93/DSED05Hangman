@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using Android;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -24,6 +24,16 @@ namespace DSED06Hangman
         }
 
 
+        public override tblscores this[int position]
+        {//return an item at this position
+            get { return items[position]; }
+        }
+
+        public override int Count
+        {//count how many items there are
+            get { return items.Count; }
+        }
+
         public override long GetItemId(int position)
         {
             return position;
@@ -34,12 +44,17 @@ namespace DSED06Hangman
             throw new NotImplementedException();
         }
 
-        public override int Count { get { return items.Count; } }
 
-        public override tblscores this[int position]
-        {
-            get { throw new NotImplementedException(); }
-        }
+        //public override View GetView(int position, View convertView, ViewGroup parent)
+        //{
+        //    var item = items[position];
+        //    var view = convertView;
+        //    if (view == null) // no view to re-use, create new
+        //        view = context.LayoutInflater.Inflate(Resource.Layout., null); 
+        //}
+
+
+
 
 
     }
