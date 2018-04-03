@@ -64,7 +64,7 @@
     <Compile Include="ScoreEditItemActivity.cs" />
     <Compile Include="SQLite.cs" />
     <Compile Include="SQLiteAsync.cs" />
-    <Compile Include="tblscores.cs" />
+    <Compile Include="scores.cs" />
     <Compile Include="Words.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +86,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\GameScore.axml" />
+    <AndroidResource Include="Resources\layout\CustomRowScore.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Main.axml">
@@ -128,6 +131,9 @@
     <AndroidAsset Include="Assets\words.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\arrowright.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

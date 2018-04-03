@@ -17,10 +17,8 @@ namespace DSED05Hangman
         private Button BackToGame;
 
         private ListView lvHighScores;
-        private List<tblscores> myList;
+        private List<scores> myList;
         private DatabaseManager myDbManager;
-        //private string dbName = "Scores.db";
-        //string dbPath = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.ToString(), dbName);
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -34,7 +32,6 @@ namespace DSED05Hangman
             BackToGame.Click += OnBackToGame_Click;
 
             lvHighScores = FindViewById<ListView>(Resource.Id.lvHighScores);
-            CopyTheDB();
             myDbManager = new DatabaseManager();
             myList = myDbManager.ViewAll();
             lvHighScores.Adapter = new DataAdapter(this, myList);
@@ -52,35 +49,19 @@ namespace DSED05Hangman
             StartActivity(EditScore);
         }
 
-        private void CopyTheDB()
-        {
-            // Check if your DB has already been extracted. If the file does not exist move it.
-            //WARNING!!!!!!!!!!! If your DB changes from the first time you install it, ie: you change the tables, and you get errors then comment out the if wrapper so that it is FORCED TO UPDATE. Otherwise you spend hours staring at code that should run OK but the db, that you can’t see inside of on your phone, is diffferent from the db you are coding to.
-            string dbName = "Score.sqlite3";
-            string dbPath = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.ToString(), dbName);
-
-            if (!File.Exists(dbPath))
-            {
-                using (BinaryReader br = new BinaryReader(Assets.Open(dbName)))
-                {
-                    using (BinaryWriter bw = new BinaryWriter(new FileStream(dbPath, FileMode.Create)))
-                    {
-                        byte[] buffer = new byte[2048];
-                        int len = 0;
-                        while ((len = br.Read(buffer, 0, buffer.Length)) > 0)
-                        {
-                            bw.Write(buffer, 0, len);
-                        }
-                    }
-                }
-            }
-            //}
-        }
-
         private void OnBackToGame_Click(object sender, EventArgs e)
         {
             StartActivity(typeof(HangmanActivity));
             this.Finish();
+        }
+
+        //Basically reload stuff when the app resumes operation after being pauused
+        protected override void OnResume()
+        {
+            base.OnResume();
+            myDbManager = new DatabaseManager();
+            myList = myDbManager.ViewAll();
+            lvHighScores.Adapter = new DataAdapter(this, myList);
         }
     }
 }

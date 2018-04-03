@@ -21,5 +21,6 @@ namespace DSED05Hangman
         public static string word { get; set; }
         public static string wordGuess { get; set; }
         public static string Name { get; set; }
+        public static DateTime CurrentTime { get; set; }
     }
 }

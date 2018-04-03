@@ -12,6 +12,7 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using DSED06Hangman;
 using Object = Java.Lang.Object;
 
 namespace DSED05Hangman
@@ -30,6 +31,9 @@ namespace DSED05Hangman
         private LinearLayout Keyboard;
         private LinearLayout Status;
         private TextView GameStatus;
+
+        //private scores myScore;
+        DatabaseManager db = new DatabaseManager();
 
         List<string> WordList = new List<string>();
         private string tag = "aaa";
@@ -68,7 +72,7 @@ namespace DSED05Hangman
 
             // Create your application here
             SetContentView(Resource.Layout.Hangman);
-            Words.Name = Intent.GetStringExtra("Name");
+            //Words.Name = Intent.GetStringExtra("Name");
             UsersName();
 
             Score();
@@ -97,6 +101,7 @@ namespace DSED05Hangman
             txtScore.Text = Words.Score.ToString();
         }
 
+        #region Loads Words From File
         private void LoadWordsFromFile()
         {
             //need to tie the asset manager to these assets in this project. This method can only run under the activity as it doesn't know what Assets is otherwise, this.Assets doesn't work
@@ -140,7 +145,9 @@ namespace DSED05Hangman
                 Console.WriteLine(e);
             }
         }
+        #endregion
 
+        #region Generate Word
         private void GenerateWord()
         {
             Log.Info(tag, "Generate Word");
@@ -155,7 +162,9 @@ namespace DSED05Hangman
             //Toast.MakeText(this, Words.word, ToastLength.Long).Show();
             LoadWord();
         }
+        #endregion
 
+        #region Load Word
         private void LoadWord()
         {
 
@@ -187,7 +196,9 @@ namespace DSED05Hangman
                 Toast.MakeText(this, "Database didn't load\n " + e, ToastLength.Short).Show();
             }
         }
+        #endregion
 
+        #region Alphabet Buttons
         private void AlphabetButtons()
         {
             btnA = FindViewById<Button>(Resource.Id.btnA);
@@ -244,7 +255,9 @@ namespace DSED05Hangman
             btnY.Click += ButtonClick;
             btnZ.Click += ButtonClick;
         }
+        #endregion
 
+        #region Button Click (Fake Button)
         private void ButtonClick(object sender, EventArgs e)
         {
             //make a fake button
@@ -263,7 +276,9 @@ namespace DSED05Hangman
             }
 
         }
+        #endregion
 
+        #region Search Letter in Word
         private static void SearchesLetterInWord(Button fakeBtn)
         {
             //Converts Words.Word to a string as you can not use Contains with a char
@@ -286,7 +301,9 @@ namespace DSED05Hangman
 
             }
         }
+        #endregion
 
+        #region Does Not Contain Letter in Word
         private void NotContainsLetter(Button fakeBtn)
         {
             if (Words.word.Contains(fakeBtn.Tag.ToString()) != true)
@@ -298,7 +315,9 @@ namespace DSED05Hangman
                 HangmanLevels();
             }
         }
+        #endregion
 
+        #region Game Won
         private void GameWon()
         {
             //Converts Words.WordGuess to a string as you can not use Contains with a char
@@ -320,7 +339,9 @@ namespace DSED05Hangman
                 Score();
             }
         }
+        #endregion
 
+        #region Hangman Levels
         private void HangmanLevels()
         {
             switch (Words.HangmanLevel)
@@ -356,7 +377,7 @@ namespace DSED05Hangman
                     GameStatus.Text = "Game Over!!!";
                     Status.Visibility = ViewStates.Visible;
 
-
+                    FinalScore();
 
                     //Reset score to 0
                     Words.Score = 0;
@@ -368,7 +389,24 @@ namespace DSED05Hangman
                     break;
             }
         }
+        #endregion
 
+        private void FinalScore()
+        {
+            Words.CurrentTime = DateTime.Now;
+            if (Words.Score == 0)
+            {
+                Log.Info(tag, "You can do better than that");
+            }
+            else if (Words.Score > 0)
+            {
+                // add score to the database
+                db.AddItem();
+                Log.Info(tag, "Data added to Database");
+            }
+        }
+
+        #region Buttons
         private void Wordtoguess()
         {
             WordToGuess = FindViewById<TextView>(Resource.Id.lblHangmanWordToGuess);
@@ -413,5 +451,6 @@ namespace DSED05Hangman
             StartActivity(newGameActivityIntent);
             UsersName();
         }
+        #endregion
     }
 }

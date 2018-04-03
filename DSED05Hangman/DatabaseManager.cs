@@ -11,6 +11,7 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using DSED05Hangman;
 using SQLite;
 
 namespace DSED06Hangman
@@ -25,78 +26,90 @@ namespace DSED06Hangman
 
 
         //YOUR CLASS NAME MUST BE YOUR TABLE NAME
-        private string dbConnection;
+        private string tag = "aaa";
+        private SQLiteConnection db;
 
         public DatabaseManager()
         {
-            dbConnection = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.ToString(), "Scores.db");
-            SQLiteConnection db = Database();
+            DBConnect();
         }
 
-        private SQLiteConnection Database()
+        private void DBConnect()
         {
-            return new SQLiteConnection(dbConnection);
+            db = new SQLiteConnection(System.IO.Path.Combine(Android.OS.Environment.ExternalStorageDirectory.ToString(), "Score.sqlite3"));
         }
 
-        public List<tblscores> ViewAll()
+        //private SQLiteConnection Database()
+        //{
+        //    return new SQLiteConnection(dbConnection);
+        //}
+
+        public List<scores> ViewAll()
         {
             try
             {
-                SQLiteConnection db = Database();
-                return db.Query<tblscores>("select * from tblscores");
+                //SQLiteConnection db = Database();
+                return db.Query<scores>("select * from scores");
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error: " + e.Message);
+                Log.Info(tag, "ERROR Did the DB move across??:" + e.Message);
                 return null;
             }
         }
 
-        public void AddItem(string name, int score)
+        public void AddItem()
         {
+            Log.Info(tag,
+                       "AddItem Name = " + Words.Name + " AddItem Score = " + Words.Score + " AddItem Date = " +
+                       Words.CurrentTime);
             try
             {
-                SQLiteConnection db = Database();
-
-                var AddThis = new tblscores() { Name = name, Score = score };
+                var AddThis = new scores
+                {
+                    Name = Words.Name,
+                    Score = Words.Score
+                };
                 db.Insert(AddThis);
+
+                Log.Info(tag, "Data Added " + AddThis);
             }
             catch (Exception e)
             {
-                Console.WriteLine("Add Error: " + e.Message);
+                Log.Info(tag, "Add Error:  " + e.Message);
             }
         }
 
 
-        public void EditItem(string name, int score, int id)
-        {
-            try
-            {
-                SQLiteConnection db = Database();
+        //public void EditItem(string name, int score, int id)
+        //{
+        //    try
+        //    {
+        //        SQLiteConnection db = Database();
 
-                var EditThis = new tblscores() { Name = name, Score = score, Id = id };
-                db.Update(EditThis);
+        //        var EditThis = new tblscores() { Name = name, Score = score, Id = id };
+        //        db.Update(EditThis);
 
-                //or this
-                //db.Execute("UPDATE tblscores Set")
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Update Error: " + e.Message);
-            }
-        }
+        //        //or this
+        //        //db.Execute("UPDATE tblscores Set")
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine("Update Error: " + e.Message);
+        //    }
+        //}
 
-        public void DeleteItem(int id)
-        {
-            try
-            {
-                SQLiteConnection db = Database();
-                db.Delete<tblscores>(id);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Delete Error: " + e.Message);
-            }
-        }
+        //public void DeleteItem(int id)
+        //{
+        //    try
+        //    {
+        //        SQLiteConnection db = Database();
+        //        db.Delete<tblscores>(id);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine("Delete Error: " + e.Message);
+        //    }
+        //}
     }
 }
